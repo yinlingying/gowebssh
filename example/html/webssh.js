@@ -52,6 +52,7 @@ function readFile(element_id, res_id) {
 	reader.readAsText(files[0], "UTF-8");
 }
 
+
 function get_term_size() {
     let init_width = 9;
 	let init_height = 17;
@@ -97,7 +98,12 @@ function get_connect_info() {
 }
 
 function ws_connect() {
-    let connect_info = get_connect_info();
+	let connect_info = get_connect_info();
+	ws_connect_direct(connect_info);
+}
+
+function ws_connect_direct(connect_info) {
+
 	// Terminal.applyAddon(attach);
 	// Terminal.applyAddon(fit);
 	// Terminal.applyAddon(fullscreen);
@@ -120,6 +126,7 @@ function ws_connect() {
 	toastr.options.closeButton = false;
 	toastr.options.showMethod = 'slideDown';
 	toastr.options.hideMethod = 'fadeOut';
+
 	toastr.options.closeMethod = 'fadeOut';
 	toastr.options.timeOut = 5000;
 	toastr.options.extendedTimeOut = 3000;
