@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webssh</title>
+    <link rel="icon" href="./favicon.ico"/>
+    <link href="./bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <!--link href="./xterm/3.14.5/xterm.min.css" rel="stylesheet"-->
+    <!--link href="./xterm/4.4.0/xterm.min.css" rel="stylesheet"-->
+    <link href="./xterm/4.8.1/xterm.css" rel="stylesheet">
+    <link href="./toastr/2.1.4.7/toastr.min.css" rel="stylesheet">
+
+    <style>
+        .input-width {
+            width: 20%;
+            display: inline-block;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div style="margin-top: 10px" id="form">
+    hehe
+</div>
+
+<div id="webssh-terminal" class="hide">
+	<div id="terminal"></div>
+</div>
+
+<script type="text/javascript" src="./jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="./zmodem/zmodem.devel.js"></script>
+<!--script type="text/javascript" src="./xterm/3.14.5/xterm.min.js"></script-->
+<!--script type="text/javascript" src="./xterm/4.4.0/xterm.min.js"></script-->
+<script type="text/javascript" src="./xterm/4.8.1/xterm.js"></script>
+<script type="text/javascript" src="./bootstrap/3.3.7/bootstrap.min.js"></script>
+<script type="text/javascript" src="./bootbox/5.4.0/bootbox.min.js"></script>
+<script type="text/javascript" src="./toastr/2.1.4.7/toastr.min.js"></script>
+
+<script type="text/javascript" src="./webssh.js"></script>
+
+</body>
+
+<script>
+    function GetRequestParam() {
+        let url = location.search; //获取url中"?"符后的字串
+        let requestParams = new Object();
+        if (url.indexOf("?") != -1) {
+            let str = url.substr(1);
+            let strs = str.split("&");
+            for(let i = 0; i < strs.length; i ++) {
+                requestParams[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return requestParams;
+    }
+
+    window.onload = function () {
+        //ws_connect();
+        let requestParams = GetRequestParam();
+        let hostname = location.hostname;
+        let protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
+        let ws_port = (location.port) ? (':' + location.port) : '';
+        let cols_rows = get_term_size();
+        let connectInfo = {
+            hostname: hostname,
+            protocol: protocol,
+            ws_port: ws_port,
+            host: requestParams["h"],
+            port: requestParams["p"],
+            user: requestParams["u"],
+            auth: "pwd",
+            passwd: requestParams["pw"],
+            ssh_key: null,
+            cols: cols_rows.cols,
+            rows: cols_rows.rows,
+        }
+
+        console.log(JSON.stringify(connectInfo));
+        ws_connect_direct(connectInfo);
+    }
+</script>
+
+</html>
